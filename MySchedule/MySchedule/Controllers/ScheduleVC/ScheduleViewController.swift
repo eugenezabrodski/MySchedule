@@ -1,5 +1,5 @@
 //
-//  TasksViewController.swift
+//  ScheduleViewController.swift
 //  MySchedule
 //
 //  Created by Eugene on 29/01/2024.
@@ -8,9 +8,10 @@
 import UIKit
 import FSCalendar
 
-class TasksViewController: UIViewController {
-
+class ScheduleViewController: UIViewController {
+    
     var calendarHeightConstraint: NSLayoutConstraint!
+    let idScheduleCell = "idScheduleCell"
     private var calendar: FSCalendar = {
         let calendar = FSCalendar()
         calendar.translatesAutoresizingMaskIntoConstraints = false
@@ -24,17 +25,27 @@ class TasksViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    let tableView: UITableView = {
+       let tableView = UITableView()
+        tableView.bounces = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Tasks"
+        title = "Schedule"
         calendar.dataSource = self
         calendar.delegate = self
         calendar.scope = .week
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: idScheduleCell)
         setConstraint()
         swipeAction()
         showHideButton.addTarget(self, action: #selector(showHideButtonTap), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTap))
     }
     
     @objc func showHideButtonTap() {
@@ -45,6 +56,11 @@ class TasksViewController: UIViewController {
             calendar.setScope(.week, animated: true)
             showHideButton.setTitle("Open calendar", for: .normal)
         }
+    }
+    
+    @objc func addButtonTap() {
+        let vc = OptionsScheduleViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func swipeAction() {
@@ -69,7 +85,7 @@ class TasksViewController: UIViewController {
     
 }
 
-extension TasksViewController {
+extension ScheduleViewController {
     
     func setConstraint() {
         view.addSubview(calendar)
@@ -88,10 +104,18 @@ extension TasksViewController {
             showHideButton.widthAnchor.constraint(equalToConstant: 100),
             showHideButton.heightAnchor.constraint(equalToConstant: 20)
         ])
+        
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: showHideButton.bottomAnchor, constant: 10),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        ])
     }
 }
 
-extension TasksViewController: FSCalendarDataSource, FSCalendarDelegate {
+extension ScheduleViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         calendarHeightConstraint.constant = bounds.height
@@ -101,4 +125,21 @@ extension TasksViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         print(date)
     }
+}
+
+extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: idScheduleCell, for: indexPath) as! ScheduleTableViewCell
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        80
+    }
+    
 }
