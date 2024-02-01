@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OptionsScheduleCell: UITableViewCell {
+class OptionsTableViewCell: UITableViewCell {
     
     let backgroundViewCell: UIView = {
         let view = UIView()
@@ -23,12 +23,6 @@ class OptionsScheduleCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    let cellNameArray = [["Date","Time"],
-                         ["Name","Type","Building", "Classroom"],
-                         ["Teacher"],
-                         [""],
-                         ["Repeat after 7 days"]]
     
     let repeatSwitch: UISwitch = {
         let repeatSwitch = UISwitch()
@@ -50,8 +44,8 @@ class OptionsScheduleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellConfigure(indexPath: IndexPath) {
-        nameCellLabel.text = cellNameArray[indexPath.section][indexPath.row]
+    func cellScheduleConfigure(nameArray: [[String]], indexPath: IndexPath) {
+        nameCellLabel.text = nameArray[indexPath.section][indexPath.row]
         
         if indexPath == [3,0] {
             backgroundViewCell.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
@@ -59,6 +53,14 @@ class OptionsScheduleCell: UITableViewCell {
         
         if indexPath == [4,0] {
             repeatSwitch.isHidden = false
+        }
+    }
+    
+    func cellTasksConfigure(nameArray: [String], indexPath: IndexPath) {
+        nameCellLabel.text = nameArray[indexPath.section]
+        
+        if indexPath == [3,0] {
+            backgroundViewCell.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
         }
     }
     

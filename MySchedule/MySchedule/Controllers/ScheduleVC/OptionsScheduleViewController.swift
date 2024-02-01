@@ -11,6 +11,12 @@ class OptionsScheduleViewController: UITableViewController {
     
     let idOptionsCell = "idOptionsCell"
     let idOptionsHeader = "idOptionsHeader"
+    let headerNameArray = ["Date and Time", "Subject", "Teacher", "Color", "Period"]
+    let cellNameArray = [["Date","Time"],
+                         ["Name","Type","Building", "Classroom"],
+                         ["Teacher"],
+                         [""],
+                         ["Repeat after 7 days"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,8 +24,8 @@ class OptionsScheduleViewController: UITableViewController {
         tableView.dataSource = self
         tableView.backgroundColor = #colorLiteral(red: 0.949019134, green: 0.9490200877, blue: 0.9705253243, alpha: 1)
         tableView.separatorStyle = .none
-        tableView.register(OptionsScheduleCell.self, forCellReuseIdentifier: idOptionsCell)
-        tableView.register(HeaderOptionsScheduleTableView.self, forHeaderFooterViewReuseIdentifier: idOptionsHeader)
+        tableView.register(OptionsTableViewCell.self, forCellReuseIdentifier: idOptionsCell)
+        tableView.register(HeaderOptionsTableView.self, forHeaderFooterViewReuseIdentifier: idOptionsHeader)
         title = "Create task"
     }
     
@@ -38,8 +44,8 @@ class OptionsScheduleViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: idOptionsCell, for: indexPath) as! OptionsScheduleCell
-        cell.cellConfigure(indexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: idOptionsCell, for: indexPath) as! OptionsTableViewCell
+        cell.cellScheduleConfigure(nameArray: cellNameArray, indexPath: indexPath)
         return cell
     }
     
@@ -48,8 +54,8 @@ class OptionsScheduleViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: idOptionsHeader) as! HeaderOptionsScheduleTableView
-        header.headerConfigure(section: section)
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: idOptionsHeader) as! HeaderOptionsTableView
+        header.headerConfigure(nameArray: headerNameArray, section: section)
         return header
     }
     
@@ -59,7 +65,7 @@ class OptionsScheduleViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRow(at: indexPath) as! OptionsScheduleCell
+        let cell = tableView.cellForRow(at: indexPath) as! OptionsTableViewCell
         
         switch indexPath {
         case [0,0]: alertDate(label: cell.nameCellLabel) { numberWeekday, date in

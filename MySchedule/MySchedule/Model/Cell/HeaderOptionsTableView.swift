@@ -7,10 +7,9 @@
 
 import UIKit
 
-class HeaderOptionsScheduleTableView: UITableViewHeaderFooterView {
+class HeaderOptionsTableView: UITableViewHeaderFooterView {
     
     let headerLabel = UILabel(text: "", font: .avenitNext14())
-    let headerNameArray = ["Date and Time", "Subject", "Teacher", "Color", "Period"]
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -31,7 +30,7 @@ class HeaderOptionsScheduleTableView: UITableViewHeaderFooterView {
         ])
     }
     
-    func headerConfigure(section: Int) {
-        headerLabel.text = headerNameArray[section]
+    func headerConfigure(nameArray: [String], section: Int) {
+        headerLabel.text = nameArray[section]
     }
 }
