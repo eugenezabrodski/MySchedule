@@ -17,6 +17,8 @@ class OptionsScheduleViewController: UITableViewController {
                          ["Teacher"],
                          [""],
                          ["Repeat after 7 days"]]
+    private var scheduleModel = ScheduleModel()
+    var hexColorCell = "8E5AF7"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,16 @@ class OptionsScheduleViewController: UITableViewController {
         tableView.register(OptionsTableViewCell.self, forCellReuseIdentifier: idOptionsCell)
         tableView.register(HeaderOptionsTableView.self, forHeaderFooterViewReuseIdentifier: idOptionsHeader)
         title = "Create task"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTask))
+    }
+    
+    @objc private func saveTask() {
+        scheduleModel.scheduleColor = hexColorCell
+        RealmManager.shared.saveScheduleModel(model: scheduleModel)
+        scheduleModel = ScheduleModel()
+        alertOKSave(title: "Success")
+        hexColorCell = "8E5AF7"
+        tableView.reloadData()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -45,7 +57,8 @@ class OptionsScheduleViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: idOptionsCell, for: indexPath) as! OptionsTableViewCell
-        cell.cellScheduleConfigure(nameArray: cellNameArray, indexPath: indexPath)
+        cell.cellScheduleConfigure(nameArray: cellNameArray, indexPath: indexPath, hexColor: hexColorCell)
+        cell.switchRepeatDelegate = self
         return cell
     }
     
@@ -68,16 +81,31 @@ class OptionsScheduleViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! OptionsTableViewCell
         
         switch indexPath {
-        case [0,0]: alertDate(label: cell.nameCellLabel) { numberWeekday, date in
-            print(date)
+        case [0,0]: 
+            alertDate(label: cell.nameCellLabel) { numberWeekday, date in
+            self.scheduleModel.scheduleDate = date
+            self.scheduleModel.scheduleWeekday = numberWeekday
         }
-        case [0,1]: alertTime(label: cell.nameCellLabel) { date in
-            print(date)
+        case [0,1]: 
+            alertTime(label: cell.nameCellLabel) { time in
+            self.scheduleModel.scheduleTime = time
         }
-        case [1, 0]: alertForCellName(label: cell.nameCellLabel, name: "Subject", placeholder: "Enter name of subject")
-        case [1, 1]: alertForCellName(label: cell.nameCellLabel, name: "Type", placeholder: "Lection or seminar")
-        case [1, 2]: alertForCellName(label: cell.nameCellLabel, name: "Building Number", placeholder: "Enter number of building")
-        case [1, 3]: alertForCellName(label: cell.nameCellLabel, name: "Classrom", placeholder: "Enter number of classroom")
+        case [1, 0]: 
+            alertForCellName(label: cell.nameCellLabel, name: "Subject", placeholder: "Enter name of subject")  { text in
+            self.scheduleModel.scheduleName = text
+        }
+        case [1, 1]: 
+            alertForCellName(label: cell.nameCellLabel, name: "Type", placeholder: "Lection or seminar")  { text in
+            self.scheduleModel.scheduleType = text
+        }
+        case [1, 2]: 
+            alertForCellName(label: cell.nameCellLabel, name: "Building Number", placeholder: "Enter number of building")  { text in
+            self.scheduleModel.scheduleBuilding = text
+        }
+        case [1, 3]: 
+            alertForCellName(label: cell.nameCellLabel, name: "Classrom", placeholder: "Enter number of classroom")  { text in
+            self.scheduleModel.scheduleClassroom = text
+        }
             
         case [2,0]:
             pushControllers(vc: TeachersVC())
@@ -92,5 +120,13 @@ class OptionsScheduleViewController: UITableViewController {
         navigationController?.navigationBar.topItem?.title = "Back"
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+}
+
+extension OptionsScheduleViewController: SwitchRepeatProtocol {
+    func switchRepeat(value: Bool) {
+        scheduleModel.scheduleRepeat = value
+    }
+    
     
 }

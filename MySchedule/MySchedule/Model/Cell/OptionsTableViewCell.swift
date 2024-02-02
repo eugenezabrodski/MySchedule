@@ -9,10 +9,11 @@ import UIKit
 
 class OptionsTableViewCell: UITableViewCell {
     
-    let backgroundViewCell: UIView = {
-        let view = UIView()
+    let backgroundViewCell: UIImageView = {
+        let view = UIImageView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
+        view.contentMode = .scaleAspectFit
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -32,6 +33,8 @@ class OptionsTableViewCell: UITableViewCell {
         return repeatSwitch
     }()
     
+    weak var switchRepeatDelegate: SwitchRepeatProtocol?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setConstraints()
@@ -44,32 +47,26 @@ class OptionsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellScheduleConfigure(nameArray: [[String]], indexPath: IndexPath) {
+    func cellScheduleConfigure(nameArray: [[String]], indexPath: IndexPath, hexColor: String) {
         nameCellLabel.text = nameArray[indexPath.section][indexPath.row]
+        repeatSwitch.isHidden = (indexPath.section == 4 ? false : true)
         
-        if indexPath == [3,0] {
-            backgroundViewCell.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
-        }
-        
-        if indexPath == [4,0] {
-            repeatSwitch.isHidden = false
-        }
+        let color = UIColor().colorFromHex(hexColor)
+        backgroundViewCell.backgroundColor = (indexPath.section == 3 ? color : .white)
     }
     
     func cellTasksConfigure(nameArray: [String], indexPath: IndexPath) {
         nameCellLabel.text = nameArray[indexPath.section]
-        
-        if indexPath == [3,0] {
-            backgroundViewCell.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
-        }
+        backgroundViewCell.backgroundColor = (indexPath.section == 3 ? #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1) : .white)
+    }
+    
+    func cellContactsConfigure(nameArray: [String], indexPath: IndexPath) {
+        nameCellLabel.text = nameArray[indexPath.section]
+        indexPath.section == 4 ? backgroundViewCell.image = UIImage(systemName: "person.fill.badge.plus") : nil
     }
     
     @objc func switchChange(paramTarget: UISwitch) {
-        if paramTarget.isOn {
-            print("On")
-        } else {
-            print("Off")
-        }
+        switchRepeatDelegate?.switchRepeat(value: paramTarget.isOn)
     }
     
     func setConstraints() {
@@ -92,5 +89,6 @@ class OptionsTableViewCell: UITableViewCell {
             repeatSwitch.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             repeatSwitch.trailingAnchor.constraint(equalTo: backgroundViewCell.trailingAnchor, constant: -20)
         ])
+        
     }
 }

@@ -11,16 +11,25 @@ class ContactsTableViewController: UITableViewController {
     
     let idContactsCell = "idOptionsTasksCell"
     
+    let searchController = UISearchController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = #colorLiteral(red: 0.949019134, green: 0.9490200877, blue: 0.9705253243, alpha: 1)
         tableView.separatorStyle = .singleLine
         tableView.register(ContactsTableViewCell.self, forCellReuseIdentifier: idContactsCell)
         title = "Contacts"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTap))
     }
     
+    @objc func addButtonTap() {
+        let vc = ContactsOptionTableViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        5
