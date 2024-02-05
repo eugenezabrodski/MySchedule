@@ -55,14 +55,15 @@ class OptionsTableViewCell: UITableViewCell {
         backgroundViewCell.backgroundColor = (indexPath.section == 3 ? color : .white)
     }
     
-    func cellTasksConfigure(nameArray: [String], indexPath: IndexPath) {
+    func cellTasksConfigure(nameArray: [String], indexPath: IndexPath, hexColor: String) {
         nameCellLabel.text = nameArray[indexPath.section]
-        backgroundViewCell.backgroundColor = (indexPath.section == 3 ? #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1) : .white)
+        let color = UIColor().colorFromHex(hexColor)
+        backgroundViewCell.backgroundColor = (indexPath.section == 3 ? color : .white)
     }
     
     func cellContactsConfigure(nameArray: [String], indexPath: IndexPath) {
         nameCellLabel.text = nameArray[indexPath.section]
-        indexPath.section == 4 ? backgroundViewCell.image = UIImage(systemName: "person.fill.badge.plus") : nil
+        backgroundViewCell.image = (indexPath.section == 4 ? UIImage(systemName: "person.fill.badge.plus") : nil)
     }
     
     @objc func switchChange(paramTarget: UISwitch) {

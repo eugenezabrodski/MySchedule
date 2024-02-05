@@ -14,7 +14,7 @@ class TasksTableViewCell: UITableViewCell {
     let readyButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setBackgroundImage(UIImage(systemName: "chevron.down.circle"), for: .normal)
+        button.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
         button.tintColor = .black
         return button
     }()
@@ -37,6 +37,18 @@ class TasksTableViewCell: UITableViewCell {
     @objc func readyButtonTap() {
         guard let indexPath = indexPath else { return }
         cellTaskDelegate?.readyButtonTap(indexPath: indexPath)
+    }
+    
+    func configure(model: TaskModel) {
+        taskName.text = model.taskName
+        taskDescription.text = model.taskDescription
+        backgroundColor = UIColor().colorFromHex("\(model.taskColor)")
+        
+        if model.taskReady {
+            readyButton.setBackgroundImage(UIImage(systemName: "checkmark.square"), for: .normal)
+        } else {
+            readyButton.setBackgroundImage(UIImage(systemName: "square"), for: .normal)
+        }
     }
     
     func setConstraints() {

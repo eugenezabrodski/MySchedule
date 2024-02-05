@@ -27,6 +27,8 @@
 		63468A912B6CE91000703FCB /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63468A902B6CE91000703FCB /* RealmManager.swift */; };
 		63468A932B6CF2BC00703FCB /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63468A922B6CF2BC00703FCB /* UIColor.swift */; };
 		63468A952B6CF8C900703FCB /* AlertOKSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63468A942B6CF8C900703FCB /* AlertOKSave.swift */; };
+		634DA2652B70D719008AB8C7 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634DA2642B70D719008AB8C7 /* TaskModel.swift */; };
+		634DA2672B70E671008AB8C7 /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634DA2662B70E671008AB8C7 /* ContactModel.swift */; };
 		63AD8E552B678D6400E4211D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD8E542B678D6400E4211D /* AppDelegate.swift */; };
 		63AD8E572B678D6400E4211D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD8E562B678D6400E4211D /* SceneDelegate.swift */; };
 		63AD8E592B678D6400E4211D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD8E582B678D6400E4211D /* MainTabBarController.swift */; };
@@ -65,6 +67,8 @@
 		63468A902B6CE91000703FCB /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		63468A922B6CF2BC00703FCB /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		63468A942B6CF8C900703FCB /* AlertOKSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertOKSave.swift; sourceTree = "<group>"; };
+		634DA2642B70D719008AB8C7 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
+		634DA2662B70E671008AB8C7 /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
 		63AD8E512B678D6400E4211D /* MySchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63AD8E542B678D6400E4211D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63AD8E562B678D6400E4211D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				63468A8D2B6CE78F00703FCB /* ScheduleModel.swift */,
+				634DA2642B70D719008AB8C7 /* TaskModel.swift */,
+				634DA2662B70E671008AB8C7 /* ContactModel.swift */,
 			);
 			path = RealmModel;
 			sourceTree = "<group>";
@@ -387,12 +393,14 @@
 				6341E9862B6912890001267B /* OptionsScheduleViewController.swift in Sources */,
 				63468A952B6CF8C900703FCB /* AlertOKSave.swift in Sources */,
 				63AD8E592B678D6400E4211D /* MainTabBarController.swift in Sources */,
+				634DA2652B70D719008AB8C7 /* TaskModel.swift in Sources */,
 				63AD8E552B678D6400E4211D /* AppDelegate.swift in Sources */,
 				6341E9882B6915060001267B /* OptionsTableViewCell.swift in Sources */,
 				6341E98F2B69328A0001267B /* AlertTime.swift in Sources */,
 				63468A912B6CE91000703FCB /* RealmManager.swift in Sources */,
 				63AD8E842B67BA4000E4211D /* UIFont.swift in Sources */,
 				63468A8E2B6CE78F00703FCB /* ScheduleModel.swift in Sources */,
+				634DA2672B70E671008AB8C7 /* ContactModel.swift in Sources */,
 				63AD8E572B678D6400E4211D /* SceneDelegate.swift in Sources */,
 				63468A932B6CF2BC00703FCB /* UIColor.swift in Sources */,
 				63AD8E7C2B67AB7200E4211D /* ScheduleTableViewCell.swift in Sources */,

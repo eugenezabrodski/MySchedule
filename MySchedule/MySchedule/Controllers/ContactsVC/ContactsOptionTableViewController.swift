@@ -9,10 +9,14 @@ import UIKit
 
 class ContactsOptionTableViewController: UITableViewController {
     
-    let idOptionsContactCell = "idOptionsContactCell"
-    let idOptionsContactHeader = "idOptionsContactHeader"
-    let headerNameArray = ["Name", "Telephone", "Mail", "Type", "Choose image"]
-    let cellNameArray = ["Name", "Phone", "Mail", "Type", ""]
+    private let idOptionsContactCell = "idOptionsContactCell"
+    private let idOptionsContactHeader = "idOptionsContactHeader"
+    
+    private let headerNameArray = ["Name", "Telephone", "Mail", "Type", "Choose image"]
+    private let cellNameArray = ["Name", "Phone", "Mail", "Type", ""]
+    
+    private var imageIsChanged = false
+    private var contactModel = ContactModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +27,40 @@ class ContactsOptionTableViewController: UITableViewController {
         tableView.register(OptionsTableViewCell.self, forCellReuseIdentifier: idOptionsContactCell)
         tableView.register(HeaderOptionsTableView.self, forHeaderFooterViewReuseIdentifier: idOptionsContactHeader)
         title = "Create contact"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTap))
+    }
+    
+    @objc func saveButtonTap() {
+        if contactModel.contactsName == "Unknown" || contactModel.contactsType == "Unknown" || contactModel.contactsPhone == "Unknown" {
+            alertOKSave(title: "Error", message: "Required fileds: NAME, TYPE AND PHONE")
+        } else {
+            setImageModel()
+            RealmManager.shared.saveContactModel(model: contactModel)
+            contactModel = ContactModel()
+            alertOKSave(title: "Success", message: "You saved the contact")
+            tableView.reloadData()
+        }
+    }
+    
+    @objc private func setImageModel() {
+        if imageIsChanged {
+            let cell = tableView.cellForRow(at: [4,0]) as! OptionsTableViewCell
+            
+            let image = cell.backgroundViewCell.image
+            guard let imageData = image?.pngData() else { return }
+            contactModel.contactsImage = imageData
+            
+            cell.backgroundViewCell.contentMode = .scaleAspectFit
+            imageIsChanged = false
+        } else {
+            contactModel.contactsImage = nil
+        }
+    }
+    
+    private func pushControllers(vc: UIViewController) {
+        let viewController = vc
+        navigationController?.navigationBar.topItem?.title = "Back"
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -59,27 +97,21 @@ class ContactsOptionTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0: alertForCellName(label: cell.nameCellLabel, name: "Name Contact", placeholder: "Enter name...") { text in
-            print(text)
+            self.contactModel.contactsName = text
         }
         case 1: alertForCellName(label: cell.nameCellLabel, name: "Phone Contact", placeholder: "Enter phone...") { text in
-            print(text)
+            self.contactModel.contactsPhone = text
         }
         case 2: alertForCellName(label: cell.nameCellLabel, name: "Mail Contact", placeholder: "Enter mail...") { text in
-            print(text)
+            self.contactModel.contactsMail = text
         }
         case 3: alertTypeContacts(label: cell.nameCellLabel) { type in
-            print(type)
+            self.contactModel.contactsType = type
         }
         default: alertCamera { [self] source in
             chooseImagePicker(source: source)
         }
         }
-    }
-    
-    private func pushControllers(vc: UIViewController) {
-        let viewController = vc
-        navigationController?.navigationBar.topItem?.title = "Back"
-        navigationController?.pushViewController(viewController, animated: true)
     }
     
 }
@@ -102,6 +134,7 @@ extension ContactsOptionTableViewController: UIImagePickerControllerDelegate, UI
         cell.backgroundViewCell.image = info[.editedImage] as? UIImage
         cell.backgroundViewCell.contentMode = .scaleAspectFill
         cell.backgroundViewCell.clipsToBounds = true
+        imageIsChanged = true
         dismiss(animated: true)
     }
 }
