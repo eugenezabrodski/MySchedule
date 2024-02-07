@@ -22,6 +22,7 @@ class TasksViewController: UIViewController {
         calendar.translatesAutoresizingMaskIntoConstraints = false
         return calendar
     }()
+    
     let showHideButton: UIButton = {
         let button = UIButton()
         button.setTitle("Open Calendar", for: .normal)
@@ -151,7 +152,7 @@ extension TasksViewController: FSCalendarDataSource, FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print(date)
+        setTaskOnDay(date: date)
     }
 }
 

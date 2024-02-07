@@ -12,12 +12,12 @@ class OptionsScheduleViewController: UITableViewController {
     let idOptionsCell = "idOptionsCell"
     let idOptionsHeader = "idOptionsHeader"
     let headerNameArray = ["Date and Time", "Subject", "Teacher", "Color", "Period"]
-    let cellNameArray = [["Date","Time"],
+    var cellNameArray = [["Date","Time"],
                          ["Name","Type","Building", "Classroom"],
                          ["Teacher"],
                          [""],
                          ["Repeat after 7 days"]]
-    private var scheduleModel = ScheduleModel()
+    var scheduleModel = ScheduleModel()
     var hexColorCell = "8E5AF7"
     
     override func viewDidLoad() {
@@ -41,6 +41,7 @@ class OptionsScheduleViewController: UITableViewController {
             scheduleModel = ScheduleModel()
             alertOKSave(title: "Success", message: "You saved the task")
             hexColorCell = "8E5AF7"
+            cellNameArray[2][0] = "Teacher"
             tableView.reloadData()
         }
     }

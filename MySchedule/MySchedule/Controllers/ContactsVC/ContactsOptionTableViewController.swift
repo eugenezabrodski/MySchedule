@@ -13,10 +13,12 @@ class ContactsOptionTableViewController: UITableViewController {
     private let idOptionsContactHeader = "idOptionsContactHeader"
     
     private let headerNameArray = ["Name", "Telephone", "Mail", "Type", "Choose image"]
-    private let cellNameArray = ["Name", "Phone", "Mail", "Type", ""]
+    var cellNameArray = ["Name", "Phone", "Mail", "Type", ""]
     
-    private var imageIsChanged = false
-    private var contactModel = ContactModel()
+    var imageIsChanged = false
+    var contactModel = ContactModel()
+    var editModel = false
+    var dataImage: Data?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,14 +33,20 @@ class ContactsOptionTableViewController: UITableViewController {
     }
     
     @objc func saveButtonTap() {
-        if contactModel.contactsName == "Unknown" || contactModel.contactsType == "Unknown" || contactModel.contactsPhone == "Unknown" {
+        if cellNameArray[0] == "Name" || cellNameArray[3] == "Type" || cellNameArray[1] == "Phone" {
             alertOKSave(title: "Error", message: "Required fileds: NAME, TYPE AND PHONE")
-        } else {
+        } else if editModel == false{
             setImageModel()
+            setModel()
             RealmManager.shared.saveContactModel(model: contactModel)
             contactModel = ContactModel()
+            cellNameArray = ["Name", "Phone", "Mail", "Type", ""]
             alertOKSave(title: "Success", message: "You saved the contact")
             tableView.reloadData()
+        } else {
+            setImageModel()
+            RealmManager.shared.editContactModel(model: contactModel, nameArray: cellNameArray, imageData: dataImage)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -48,13 +56,21 @@ class ContactsOptionTableViewController: UITableViewController {
             
             let image = cell.backgroundViewCell.image
             guard let imageData = image?.pngData() else { return }
-            contactModel.contactsImage = imageData
+            dataImage = imageData
             
             cell.backgroundViewCell.contentMode = .scaleAspectFit
             imageIsChanged = false
         } else {
-            contactModel.contactsImage = nil
+            dataImage = nil
         }
+    }
+    
+    private func setModel() {
+        contactModel.contactsName = cellNameArray[0]
+        contactModel.contactsPhone = cellNameArray[1]
+        contactModel.contactsMail = cellNameArray[2]
+        contactModel.contactsType = cellNameArray[3]
+        contactModel.contactsImage = dataImage
     }
     
     private func pushControllers(vc: UIViewController) {
@@ -73,7 +89,13 @@ class ContactsOptionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: idOptionsContactCell, for: indexPath) as! OptionsTableViewCell
-        cell.cellContactsConfigure(nameArray: cellNameArray, indexPath: indexPath)
+        if editModel == false {
+            cell.cellContactsConfigure(nameArray: cellNameArray, indexPath: indexPath, image: nil)
+        } else if let data = contactModel.contactsImage, let image = UIImage(data: data) {
+            cell.cellContactsConfigure(nameArray: cellNameArray, indexPath: indexPath, image: image)
+        } else {
+            cell.cellContactsConfigure(nameArray: cellNameArray, indexPath: indexPath, image: nil)
+        }
         return cell
     }
     
@@ -97,16 +119,16 @@ class ContactsOptionTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0: alertForCellName(label: cell.nameCellLabel, name: "Name Contact", placeholder: "Enter name...") { text in
-            self.contactModel.contactsName = text
+            self.cellNameArray[0] = text
         }
         case 1: alertForCellName(label: cell.nameCellLabel, name: "Phone Contact", placeholder: "Enter phone...") { text in
-            self.contactModel.contactsPhone = text
+            self.cellNameArray[1] = text
         }
         case 2: alertForCellName(label: cell.nameCellLabel, name: "Mail Contact", placeholder: "Enter mail...") { text in
-            self.contactModel.contactsMail = text
+            self.cellNameArray[2] = text
         }
         case 3: alertTypeContacts(label: cell.nameCellLabel) { type in
-            self.contactModel.contactsType = type
+            self.cellNameArray[3] = type
         }
         default: alertCamera { [self] source in
             chooseImagePicker(source: source)

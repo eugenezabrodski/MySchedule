@@ -15,13 +15,13 @@ extension UIViewController {
         
         let friend = UIAlertAction(title: "Friend", style: .default) { _ in
             label.text = "Friend"
-            let typeContact = "Friends"
+            let typeContact = "Friend"
             completionHandler(typeContact)
         }
         
         let teacher = UIAlertAction(title: "Teacher", style: .default) { _ in
             label.text = "Teacher"
-            let typeContact = "Teachers"
+            let typeContact = "Teacher"
             completionHandler(typeContact)
         }
         
